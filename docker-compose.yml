@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     container_name: ip_challenge_app
     volumes:
-      - ./app:/app
+      - ./app:/usr/src/app
     ports:
       - "3033:3000"
 
