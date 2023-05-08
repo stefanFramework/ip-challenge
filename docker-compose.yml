@@ -9,6 +9,19 @@ services:
       - ./app:/usr/src/app
     ports:
       - "3033:3000"
+    depends_on:
+      - database
+
+  database:
+    image: mongo:3.6
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - MONGO_INITDB_DATABASE=challenge
+    volumes:
+      - ./db/data:/data/db
+    ports:
+      - "27017:27017"
 
 #  database:
 #    image: postgres:14

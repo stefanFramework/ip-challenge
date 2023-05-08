@@ -15,6 +15,7 @@ export class TraceController {
      *  3. Add MongoDB for presistency
      *  4. Add Config file
      *  5. See Currency integration
+     *  6. Move calculation to utils
      */
     const { ip } = informationRecord;
     return await this.traceService.getTraceFromIp(ip);
