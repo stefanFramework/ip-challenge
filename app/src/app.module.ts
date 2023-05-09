@@ -5,6 +5,9 @@ import { TraceController } from './http/controllers/TraceController';
 import { TraceService } from './domain/services/TraceService';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AddressInformationSchema } from './domain/entities/AddressInformation';
+import { AddressInformationRepository } from './infrastructure/repositories/AddressInformationRepository';
+import { ApiClient } from './infrastructure/apiclient/ApiClient';
+import { IpApiClient } from './domain/integrations/IpApiClient';
 
 @Module({
   imports: [
@@ -17,6 +20,11 @@ import { AddressInformationSchema } from './domain/entities/AddressInformation';
     ]),
   ],
   controllers: [TraceController, StatisticsController],
-  providers: [TraceService],
+  providers: [
+    TraceService,
+    AddressInformationRepository,
+    ApiClient,
+    IpApiClient,
+  ],
 })
 export class AppModule {}

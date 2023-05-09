@@ -5,22 +5,25 @@ export type AddressInformationDocument = HydratedDocument<AddressInformation>;
 
 @Schema()
 export class AddressInformation {
-  @Prop()
+  @Prop({ default: '' })
   ip: string;
 
-  @Prop()
+  @Prop({ default: '' })
   name: string;
 
-  @Prop()
+  @Prop({ default: 0 })
+  counter: number;
+
+  @Prop({ default: '' })
   countryCode: string;
 
-  @Prop()
+  @Prop({ default: 0 })
   lat: number;
 
-  @Prop()
+  @Prop({ default: 0 })
   lon: number;
 
-  @Prop()
+  @Prop({ default: 0 })
   distanceToUSA: number;
 }
 

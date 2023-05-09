@@ -1,5 +1,4 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { InformationRecord } from '../records/InformationRecord';
 import { TraceService } from '../../domain/services/TraceService';
 
 @Controller('traces')
@@ -7,7 +6,7 @@ export class TraceController {
   constructor(private readonly traceService: TraceService) {}
 
   @Post()
-  async getInformation(@Body() informationRecord: InformationRecord) {
+  async getInformation(@Body() body) {
     /*
      * TODO:
      *  1. Add input validation
@@ -17,7 +16,7 @@ export class TraceController {
      *  5. See Currency integration
      *  6. Move calculation to utils
      */
-    const { ip } = informationRecord;
+    const { ip } = body;
     return await this.traceService.getTraceFromIp(ip);
   }
 }
