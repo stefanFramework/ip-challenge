@@ -26,6 +26,7 @@
     "@nestjs/mongoose": "^9.2.2",
     "@nestjs/platform-express": "^9.0.0",
     "axios": "^1.4.0",
+    "ip-address": "^8.1.0",
     "mongoose": "^7.1.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0"

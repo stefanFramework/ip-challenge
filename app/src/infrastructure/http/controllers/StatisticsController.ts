@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { AddressInformationDocument } from '../../domain/entities/AddressInformation';
+import { AddressInformationDocument } from '../../../domain/entities/AddressInformation';
 
 @Controller('statistics')
 export class StatisticsController {

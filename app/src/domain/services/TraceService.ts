@@ -23,7 +23,6 @@ export class TraceService {
       await this.addressInformationRepository.findByIp(ip);
 
     if (existingAddressInformation) {
-      console.log(typeof existingAddressInformation);
       existingAddressInformation.counter += 1;
       existingAddressInformation.save();
       return existingAddressInformation;
@@ -61,6 +60,6 @@ export class TraceService {
     //
     // console.log(iso);
 
-    return newModel;
+    return newAddressInformation;
   }
 }

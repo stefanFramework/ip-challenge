@@ -8,10 +8,12 @@ export class IpApiClient {
 
   async getTraceFromIp(ip: string): Promise<IpApiClientRecord> {
     const { data } = await this.client.get(`http://ip-api.com/json/${ip}`);
-    return this.buildResponse(data);
+    console.log('Result');
+    console.log(JSON.stringify(data));
+    return await this.buildResponse(data);
   }
 
-  buildResponse(data) {
+  async buildResponse(data) {
     const response = new IpApiClientRecord();
     response.ip = data.query;
     response.countryCode = data.countryCode;
