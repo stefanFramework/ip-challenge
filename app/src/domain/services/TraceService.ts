@@ -25,19 +25,20 @@ export class TraceService {
       return existingAddressInformation;
     }
 
+    const addressInformation = await this.fetchAddressInformation(ip);
+
+    this.addressInformationRepository.create(addressInformation);
+    return addressInformation;
+  }
+
+  async fetchAddressInformation(ip: string) {
     const traceRecord = await this.ipApiClient.getTraceFromIp(ip);
     const { currencyCode } = traceRecord;
     const currencyResult = await this.currencyApiClient.getLatestRate(
       currencyCode,
     );
 
-    const addressInformation = this.mapToAddressInformation(
-      traceRecord,
-      currencyResult,
-    );
-
-    this.addressInformationRepository.create(addressInformation);
-    return addressInformation;
+    return this.mapToAddressInformation(traceRecord, currencyResult);
   }
 
   mapToAddressInformation(ipResult, currencyResult) {
