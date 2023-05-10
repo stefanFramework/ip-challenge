@@ -1,15 +1,15 @@
 import { ApiClient } from '../../infrastructure/apiclient/ApiClient';
 import { Injectable } from '@nestjs/common';
 import { IpTraceRecord } from './records/IpTraceRecord';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class IpApiClient {
-  constructor(private client: ApiClient) {}
+  constructor(private client: ApiClient, private config: ConfigService) {}
 
   async getTraceFromIp(ip: string): Promise<IpTraceRecord> {
-    const { data } = await this.client.get(
-      `http://ip-api.com/json/${ip}?fields=query,country,countryCode,lat,lon,currency`,
-    );
+    const url = this.config.get<string>('ipApi.url');
+    const { data } = await this.client.get(url.replace('IP_TO_QUERY', ip));
     return this.buildResponse(data);
   }
 

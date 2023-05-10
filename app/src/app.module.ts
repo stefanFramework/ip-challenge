@@ -9,19 +9,33 @@ import { IpApiClient } from './domain/integrations/IpApiClient';
 import { TraceController } from './infrastructure/http/controllers/TraceController';
 import { StatisticsController } from './infrastructure/http/controllers/StatisticsController';
 import { CurrencyApiClient } from './domain/integrations/CurrencyApiClient';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import configuration from './config/configuration';
+import { HealthController } from './infrastructure/http/controllers/HealthController';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['./.env'],
+      load: [configuration],
+    }),
     HttpModule,
-    MongooseModule.forRoot('mongodb://admin:admin@database:27017', {
-      dbName: 'challenge',
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (config: ConfigService) => ({
+        uri: config.get('database.connString'),
+        dbName: config.get('database.name'),
+      }),
+      inject: [ConfigService],
     }),
     MongooseModule.forFeature([
       { name: 'AddressInformation', schema: AddressInformationSchema },
     ]),
   ],
-  controllers: [TraceController, StatisticsController],
+  controllers: [TraceController, StatisticsController, HealthController],
   providers: [
+    ConfigService,
     TraceService,
     AddressInformationRepository,
     ApiClient,
