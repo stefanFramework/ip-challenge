@@ -36,13 +36,23 @@ export class TraceController {
   }
 
   buildResponse(addressInformation) {
+    const currencies = [];
+
+    addressInformation.currencyInformation.forEach((currencyInformation) => {
+      currencies.push({
+        iso: currencyInformation.iso,
+        symbol: currencyInformation.symbol,
+        conversion_rate: currencyInformation.conversionRate,
+      });
+    });
+
     return {
       ip: addressInformation.ip,
       name: addressInformation.name,
       code: addressInformation.countryCode,
       lat: addressInformation.lat,
       lon: addressInformation.lon,
-      currencies: [],
+      currencies: currencies,
       distance_to_usa: addressInformation.distanceToUSA,
     };
   }

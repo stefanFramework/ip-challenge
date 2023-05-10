@@ -13,4 +13,12 @@ export class AddressInformationRepository {
   async findByIp(ip: string) {
     return this.addressInformationModel.findOne({ ip: ip });
   }
+
+  async findLongestDistance() {
+    return this.addressInformationModel.findOne().sort({ distanceToUSA: -1 });
+  }
+
+  async findMostTraced() {
+    return this.addressInformationModel.findOne().sort({ counter: -1 });
+  }
 }

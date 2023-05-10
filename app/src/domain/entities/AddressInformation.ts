@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { CurrencyInformation } from './CurrencyInformation';
 
 export type AddressInformationDocument = HydratedDocument<AddressInformation>;
 
@@ -17,6 +18,9 @@ export class AddressInformation {
   @Prop({ default: '' })
   countryCode: string;
 
+  @Prop({ default: '' })
+  currencyCode: string;
+
   @Prop({ default: 0 })
   lat: number;
 
@@ -25,19 +29,10 @@ export class AddressInformation {
 
   @Prop({ default: 0 })
   distanceToUSA: number;
+
+  @Prop({ default: [] })
+  currencyInformation: [CurrencyInformation];
 }
 
 export const AddressInformationSchema =
   SchemaFactory.createForClass(AddressInformation);
-
-/**
- * const response = {
- *       ip: data.query,
- *       name: data.country,
- *       code: data.countryCode,
- *       lat: data.lat,
- *       lon: data.lon,
- *       currencies: [],
- *       distance_to_usa: this.getDistanceToUSA(data.lat, data.lon),
- *     };
- */

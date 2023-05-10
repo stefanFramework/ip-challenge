@@ -8,6 +8,7 @@ import { ApiClient } from './infrastructure/apiclient/ApiClient';
 import { IpApiClient } from './domain/integrations/IpApiClient';
 import { TraceController } from './infrastructure/http/controllers/TraceController';
 import { StatisticsController } from './infrastructure/http/controllers/StatisticsController';
+import { CurrencyApiClient } from './domain/integrations/CurrencyApiClient';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { StatisticsController } from './infrastructure/http/controllers/Statisti
     AddressInformationRepository,
     ApiClient,
     IpApiClient,
+    CurrencyApiClient,
   ],
 })
 export class AppModule {}
