@@ -1,10 +1,11 @@
-import { ApiClient } from '../../infrastructure/apiclient/ApiClient';
 import { Injectable } from '@nestjs/common';
-import { CurrencyRecord } from './records/CurrencyRecord';
 import { ConfigService } from '@nestjs/config';
+import { CurrencyRecord } from './records/CurrencyRecord';
+import { CurrencyApiClientInterface } from '../../domain/integrations/CurrencyApiClientInterface';
+import { ApiClient } from './ApiClient';
 
 @Injectable()
-export class CurrencyApiClient {
+export class CurrencyApiClient implements CurrencyApiClientInterface {
   private readonly options;
   constructor(private client: ApiClient, private config: ConfigService) {
     this.options = {
@@ -12,13 +13,15 @@ export class CurrencyApiClient {
     };
   }
 
-  async getLatestRate(currencyCode: string): Promise<CurrencyRecord[]> {
-    const url = this.config.get<string>('currencyApi.url');
-    const { data } = await this.client.get(
-      url.replace('CURRENCY_CODE', currencyCode),
-      this.options,
-    );
+  async getLatestRate(currencyCode: string) {
+    const url = this.buildUrl(currencyCode);
+    const { data } = await this.client.get(url, this.options);
     return this.buildResponse(data);
+  }
+
+  buildUrl(currencyCode) {
+    const url = this.config.get<string>('currencyApi.url');
+    return url.replace('CURRENCY_CODE', currencyCode);
   }
 
   buildResponse(data) {

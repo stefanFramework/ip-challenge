@@ -1,17 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
-import { AddressInformationRepository } from '../../repositories/AddressInformationRepository';
+import { TraceStatisticsService } from '../../../domain/services/TraceStatisticsService';
 
 @Controller('statistics')
 export class StatisticsController {
-  constructor(
-    private addressInformationRepository: AddressInformationRepository,
-  ) {}
+  constructor(private statisticsService: TraceStatisticsService) {}
 
   @Get()
   async getStatistics() {
-    const longestDistance =
-      await this.addressInformationRepository.findLongestDistance();
-    const mostTraced = await this.addressInformationRepository.findMostTraced();
+    const longestDistance = await this.statisticsService.getLongestDistance();
+    const mostTraced = await this.statisticsService.getMostTraced();
 
     return {
       longest_distance: {

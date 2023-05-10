@@ -1,24 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
-import {
-  AddressInformation,
-  AddressInformationDocument,
-} from '../entities/AddressInformation';
-import { InjectModel } from '@nestjs/mongoose';
-import { AddressInformationRepository } from '../../infrastructure/repositories/AddressInformationRepository';
-import { IpApiClient } from '../integrations/IpApiClient';
+import { AddressInformation } from '../entities/AddressInformation';
 import { getDistanceToUSA } from '../helpers/distance';
-import { CurrencyApiClient } from '../integrations/CurrencyApiClient';
 import { CurrencyInformation } from '../entities/CurrencyInformation';
+import { AddressInformationRepositoryInterface } from '../repositories/AddressInformationRepositoryInterface';
+import { IpApiClientInterface } from '../integrations/IpApiClientInterface';
+import { CurrencyApiClientInterface } from '../integrations/CurrencyApiClientInterface';
+import { CurrencyRecordInterface } from '../integrations/records/CurrencyRecordInterface';
 
 @Injectable()
 export class TraceService {
   constructor(
-    private readonly ipApiClient: IpApiClient,
-    private readonly currencyApiClient: CurrencyApiClient,
-    @InjectModel('AddressInformation')
-    private addressInformationModel: Model<AddressInformationDocument>,
-    private addressInformationRepository: AddressInformationRepository,
+    private readonly ipApiClient: IpApiClientInterface,
+    private readonly currencyApiClient: CurrencyApiClientInterface,
+    private addressInformationRepository: AddressInformationRepositoryInterface,
   ) {}
 
   async getTraceFromIp(ip: string) {
@@ -31,20 +25,18 @@ export class TraceService {
       return existingAddressInformation;
     }
 
-    const trace = await this.ipApiClient.getTraceFromIp(ip);
-    const { currencyCode } = trace;
+    const traceRecord = await this.ipApiClient.getTraceFromIp(ip);
+    const { currencyCode } = traceRecord;
     const currencyResult = await this.currencyApiClient.getLatestRate(
       currencyCode,
     );
 
     const addressInformation = this.mapToAddressInformation(
-      trace,
+      traceRecord,
       currencyResult,
     );
 
-    const newModel = await new this.addressInformationModel(addressInformation);
-    await newModel.save();
-
+    this.addressInformationRepository.create(addressInformation);
     return addressInformation;
   }
 
@@ -68,7 +60,7 @@ export class TraceService {
   }
 
   mapCurrencyRecord(currencyResult) {
-    return currencyResult.map((record) => {
+    return currencyResult.map((record: CurrencyRecordInterface) => {
       const ci = new CurrencyInformation();
       ci.iso = record.iso;
       ci.symbol = record.symbol;

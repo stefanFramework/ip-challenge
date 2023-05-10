@@ -1,17 +1,46 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
-import { TraceService } from './domain/services/TraceService';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AddressInformationSchema } from './domain/entities/AddressInformation';
-import { AddressInformationRepository } from './infrastructure/repositories/AddressInformationRepository';
-import { ApiClient } from './infrastructure/apiclient/ApiClient';
-import { IpApiClient } from './domain/integrations/IpApiClient';
-import { TraceController } from './infrastructure/http/controllers/TraceController';
-import { StatisticsController } from './infrastructure/http/controllers/StatisticsController';
-import { CurrencyApiClient } from './domain/integrations/CurrencyApiClient';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import configuration from './config/configuration';
+
+import { TraceService } from './domain/services/TraceService';
+import { IpApiClientInterface } from './domain/integrations/IpApiClientInterface';
+import { AddressInformationSchema } from './domain/entities/AddressInformation';
+import { CurrencyApiClientInterface } from './domain/integrations/CurrencyApiClientInterface';
+import { AddressInformationRepositoryInterface } from './domain/repositories/AddressInformationRepositoryInterface';
+
+import configuration from './infrastructure/config/configuration';
+import { ApiClient } from './infrastructure/integrations/ApiClient';
+import { IpApiClient } from './infrastructure/integrations/IpApiClient';
+import { TraceController } from './infrastructure/http/controllers/TraceController';
+import { CurrencyApiClient } from './infrastructure/integrations/CurrencyApiClient';
 import { HealthController } from './infrastructure/http/controllers/HealthController';
+import { StatisticsController } from './infrastructure/http/controllers/StatisticsController';
+import { AddressInformationRepository } from './infrastructure/repositories/AddressInformationRepository';
+import { TraceStatisticsService } from './domain/services/TraceStatisticsService';
+
+const TraceServiceFactory = {
+  provide: TraceService,
+  useFactory: (
+    ipApiClient: IpApiClientInterface,
+    currencyApiClient: CurrencyApiClientInterface,
+    addressInformationRepository: AddressInformationRepositoryInterface,
+  ) =>
+    new TraceService(
+      ipApiClient,
+      currencyApiClient,
+      addressInformationRepository,
+    ),
+  inject: [IpApiClient, CurrencyApiClient, AddressInformationRepository],
+};
+
+const TraceStatisticsServiceFactory = {
+  provide: TraceStatisticsService,
+  useFactory: (
+    addressInformationRepository: AddressInformationRepositoryInterface,
+  ) => new TraceStatisticsService(addressInformationRepository),
+  inject: [AddressInformationRepository],
+};
 
 @Module({
   imports: [
@@ -36,7 +65,8 @@ import { HealthController } from './infrastructure/http/controllers/HealthContro
   controllers: [TraceController, StatisticsController, HealthController],
   providers: [
     ConfigService,
-    TraceService,
+    TraceServiceFactory,
+    TraceStatisticsServiceFactory,
     AddressInformationRepository,
     ApiClient,
     IpApiClient,

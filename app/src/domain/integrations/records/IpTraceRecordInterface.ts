@@ -1,4 +1,4 @@
-export class IpTraceRecord {
+export interface IpTraceRecordInterface {
   ip: string;
   countryCode: string;
   currencyCode: string;
