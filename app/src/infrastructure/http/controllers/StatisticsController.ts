@@ -10,6 +10,12 @@ export class StatisticsController {
     const longestDistance = await this.statisticsService.getLongestDistance();
     const mostTraced = await this.statisticsService.getMostTraced();
 
+    if (!longestDistance || !mostTraced) {
+      return {
+        message: 'Unable to show information',
+      };
+    }
+
     return {
       longest_distance: {
         country: longestDistance.name,
