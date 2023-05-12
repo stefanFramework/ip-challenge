@@ -39,7 +39,7 @@ Expected Response
         }
     ],
     "distance_to_usa": 4578.23852030068
-
+}
 ```
  
 - /statistics (GET)
