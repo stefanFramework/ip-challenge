@@ -1,5 +1,25 @@
 # IP Challenge
 
+This repository contains a RESTful API built in TypeScript that allows tracing IP addresses and gathering statistics from tracked data. The API is designed to handle high concurrency and can process between **1,000 to 5 million requests per minute**.
+
+## Features
+
+- **/traces** (POST): Given an IP address, returns:
+  - Country of origin and its ISO code.
+  - Geographic coordinates (latitude & longitude).
+  - List of currencies used in that country, including their symbols and conversion rates to USD.
+  - Distance between the country of origin and the United States.
+
+- **/statistics** (GET): Provides insights on:
+  - The longest distance recorded from requested traces.
+  - The most frequently traced country.
+
+The API leverages **ip-api.com** for IP geolocation and **fixer.io** for currency conversion data.
+
+## Getting Started
+
+To deploy and use the API, follow the setup instructions below.
+
 ## Instalation
 ```
 1. Install node v18.7.0
