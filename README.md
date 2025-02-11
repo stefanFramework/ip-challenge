@@ -1,6 +1,6 @@
 # IP Challenge
 
-This repository contains a RESTful API built in TypeScript that allows tracing IP addresses and gathering statistics from tracked data. The API is designed to handle high concurrency and can process between **1,000 to 5 million requests per minute**.
+This repository contains a RESTful API built in TypeScript that allows tracing IP addresses and gathering statistics from tracked data. The API is designed to handle high concurrency and can process **1,000+ requests per minute**.
 
 ## Features
 
